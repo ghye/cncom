@@ -84,7 +84,7 @@ void serial_display(unsigned char *buf, int len)
 		if (0 == dm)
 			printf ("%.2X ", buf[i]);
 		else if (1 == dm)
-			printf ("%c ", buf[i]);
+			printf ("%c", buf[i]);
 	
 	}
 	//setbuf(stdout, NULL);	//fflush stdin
