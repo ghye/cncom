@@ -8,8 +8,9 @@
 #include "g_param.h"
 
 static int dm = -1;
+static int serial_fp = -1;
 
-int serial_conf(int argc, char **argv)
+int serial_init(int argc, char **argv)
 {
 	int fp;
 	int status;
@@ -69,12 +70,28 @@ int serial_conf(int argc, char **argv)
 		goto fail;
 	}
 	tcflush(fp, TCIOFLUSH);
+	serial_fp = fp;
 	return fp;
 
 fail:
 	close(fp);
 ff:
 	return -1;
+}
+
+int serial_write(unsigned char *buf, int len)
+{
+	return write(serial_fp, buf, len);
+}
+
+int serial_read(unsigned char *buf, int len)
+{
+	return read(serial_fp, buf, len);
+}
+
+int serail_close(void)
+{
+	return close(serial_fp);
 }
 
 void serial_display(unsigned char *buf, int len)

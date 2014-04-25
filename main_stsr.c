@@ -1,10 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h>
-#include <fcntl.h>
 #include <errno.h>
-#include <signal.h>
 
 #include "g_param.h"
 #include "sig_handler.h"
@@ -23,43 +20,39 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	fp = serial_conf(argc, argv);
+	fp = serial_init(argc, argv);
 	if (fp == -1) {
 		printf("error open\n");
 		return -1;
 	}
-	serial_fp = fp;
-
 
 	int cnt = 0;
 	while (0 == exit_main) {
 		unsigned char wv = cnt;
+		char str[] = "abcdEf\r\n";
+		char rstr[32];
 		unsigned char rv;
 		int len;
-		len = 1;
-		int w = write (fp, &wv, len);
+		len = strlen(str);
+		int w = serial_write(str, len);
 		if (w < 0) {
 			printf("write error");
 			break;
 		}
 		//printf("write ok\n");
-		int r = read(fp, &rv, 1);
-		if (r == 1) {
+		int r = serial_read(rstr, 32);
+		if (r > 0) {
 			//printf("%.2X\n", rv);
-			serial_display(&rv, 1);
-			if (rv != wv) {
-				printf("dont the orig value\n");
-				break;
-			}
+			serial_display(&rstr, r);
 		} else {
 			printf("dont recv\n");
 			break;
 		}
 		//printf("sleep\n");
-		usleep(600);
+		sleep(1);
 		cnt++;
 	}
-	close(fp);
+	serail_close();
 	printf("\nexit\n");
 
 	return 0;
