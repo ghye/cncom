@@ -39,7 +39,8 @@ WX_CXXFLAGS ?= `$(WX_CONFIG) --cxxflags`
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
 MENU_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MENU_OBJECTS =  \
-	menu_menu.o
+	menu_menu.o \
+	mythread.o
 
 ### Conditionally set variables: ###
 
@@ -62,6 +63,8 @@ menu: $(MENU_OBJECTS)
 	$(CXX) -o $@ $(MENU_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
 
 menu_menu.o: ./menu.cpp
+	$(CXX) -c -o $@ $(MENU_CXXFLAGS) $(CPPDEPS) $<
+mythread.o: ./mythread.cpp
 	$(CXX) -c -o $@ $(MENU_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean

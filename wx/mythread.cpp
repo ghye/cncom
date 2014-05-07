@@ -1,36 +1,32 @@
 #include <wx/utils.h>
 
+#include "mythread.h"
 #include "menu.h"
 
-class CncomThread : public wxThread
+DECLARE_APP(CncomApp);
+
+CncomThread::CncomThread(CncomFrame *frame) : wxThread()
 {
-public:
-	CncomThread(CncomFrame *frame);
-	~CncomThread();
-
-	virtual void *Entry();
-	//virtual void OnExit();
-
-private:
-	CncomFrame *m_frame;
-
-}
-
-CncomThread::CncomThread(CncomThread *frame) : wxThread()
-{
+	wxPrintf(_T("struct CncomThread\n"));
 	m_frame = frame;
 }
 
 CncomThread::~CncomThread()
 {
-	wxPrintf(_T("destruct CncomThread\r\n"));
+	wxPrintf(_T("destruct CncomThread\n"));
 }
 
 void *CncomThread::Entry()
 {
-	while (!wxGetApp().m_thread_exit) {
-		wxPrintf(_T("thread\r\n"));
-		wxThread::Sleep(1000);
+	//while (!wxGetApp().m_thread_exit) {
+	while (m_frame->m_thread_exit == 0) {
+		wxPrintf(_T("thread\n"));
+		wxThread::Sleep(2000);
 		//wxMicroSleep();
 	}
+}
+
+void CncomThread::OnExit()
+{
+	m_frame->m_thread_exit = 0;
 }

@@ -15,37 +15,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// for compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-// for all others, include the necessary headers
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-    #include "wx/app.h"
-    #include "wx/frame.h"
-    #include "wx/dcclient.h"
-
-    #include "wx/button.h"
-    #include "wx/checkbox.h"
-    #include "wx/checklst.h"
-    #include "wx/listbox.h"
-    #include "wx/radiobox.h"
-    #include "wx/radiobut.h"
-    #include "wx/statbox.h"
-    #include "wx/stattext.h"
-    #include "wx/textctrl.h"
-    #include "wx/choice.h"
-#endif
-
-#include "wx/sizer.h"
-
-#ifdef __WXUNIVERSAL__
-    #include "wx/univ/theme.h"
-#endif // __WXUNIVERSAL__
+#include "menu.h"
+#include "mythread.h"
 
 enum
 {
@@ -61,43 +32,11 @@ enum
 wxString g_string_open = wxString(_T("open"));
 wxString g_string_close = wxString(_T("close"));
 
-class CncomApp : public wxApp
-{
-public:
-	// override base class virtuals
-	// ----------------------------
-
-	// this one is called on application startup and is a good place for the app
-	// initialization (doing it here and not in the ctor allows to have an error
-	// return: if OnInit() returns false, the application terminates)
-	virtual bool OnInit();
-};
-
-class CncomFrame : public wxFrame
-{
-public:
-	// ctor(s) and dtor
-	CncomFrame(const wxString& title);
-	virtual ~CncomFrame();
-
-private:
-	wxPanel		*m_panel;
-	wxButton	*m_OpenCloseCom;
-	wxTextCtrl	*m_ComPath;
-	wxChoice	*m_ChoiceBps;
-	wxChoice	*m_ChoiceDataLen;
-	wxChoice	*m_ChoiceParity;
-	wxChoice	*m_ChoiceStopBits;
-
-	void doOpenCloseCom(wxCommandEvent& event);
-
-	DECLARE_EVENT_TABLE()
-};
-
 IMPLEMENT_APP(CncomApp)
 
 BEGIN_EVENT_TABLE(CncomFrame, wxFrame)
 	EVT_BUTTON(CNCOM_ID_OPEN_CLOSE_BUTTON, CncomFrame::doOpenCloseCom)
+	EVT_CLOSE(CncomFrame::OnClose)
 END_EVENT_TABLE()
 
 
@@ -197,10 +136,37 @@ CncomFrame::CncomFrame(const wxString& title)
 
 	sizer_top->Fit(this);
 	sizer_top->SetSizeHints(this);
+
+
+	/* create and run thread */
+	m_thread_exit = 0;
+	wxPrintf(_T("thread 1\n"));
+	m_thread = doCreateThread();
+	wxPrintf(_T("thread 2\n"));
+	if (m_thread != NULL) {
+		wxPrintf(_T("thread 3\n"));
+		m_thread->Run();
+	}
+	wxPrintf(_T("thread runing now\n"));
 }
 
 CncomFrame::~CncomFrame()
 {
+}
+
+void CncomFrame::OnClose(wxCloseEvent& event)
+{
+	if (m_thread != NULL) {
+		m_thread_exit = 1;
+		while (m_thread_exit == 1)
+			wxThread::Sleep(1);
+		//delete m_thread;
+		m_thread = NULL;
+	}
+
+	wxPrintf(_T("frame closed\n"));
+
+	event.Skip();	/* must do that */
 }
 
 void CncomFrame::doOpenCloseCom(wxCommandEvent& event)
@@ -218,4 +184,16 @@ void CncomFrame::doOpenCloseCom(wxCommandEvent& event)
 	wxPrintf(_T("datalen %s\r\n"), (m_ChoiceDataLen->GetString(m_ChoiceDataLen->GetSelection())).c_str());
 	wxPrintf(_T("parity %s\r\n"), (m_ChoiceParity->GetString(m_ChoiceParity->GetSelection())).c_str());
 	wxPrintf(_T("stopbits %s\r\n"), (m_ChoiceStopBits->GetString(m_ChoiceStopBits->GetSelection())).c_str());
+}
+
+CncomThread *CncomFrame::doCreateThread()
+{
+	CncomThread *thread = new CncomThread(this);
+	if (thread->Create() != wxTHREAD_NO_ERROR) {
+		wxPrintf(_T("thread create error\n"));
+		delete thread;
+		thread = NULL;
+	}
+
+	return thread;
 }
