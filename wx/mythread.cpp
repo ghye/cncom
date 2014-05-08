@@ -29,4 +29,6 @@ void *CncomThread::Entry()
 void CncomThread::OnExit()
 {
 	m_frame->m_thread_exit = 0;
+	wxMutexLocker lock(*m_frame->m_mutex);
+	m_frame->m_cond->Broadcast();
 }

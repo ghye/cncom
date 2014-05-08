@@ -140,6 +140,9 @@ CncomFrame::CncomFrame(const wxString& title)
 
 	/* create and run thread */
 	m_thread_exit = 0;
+	m_mutex = new wxMutex();
+	m_cond = new wxCondition(*m_mutex);
+	m_mutex->Lock();
 	wxPrintf(_T("thread 1\n"));
 	m_thread = doCreateThread();
 	wxPrintf(_T("thread 2\n"));
@@ -158,8 +161,14 @@ void CncomFrame::OnClose(wxCloseEvent& event)
 {
 	if (m_thread != NULL) {
 		m_thread_exit = 1;
-		while (m_thread_exit == 1)
-			wxThread::Sleep(1);
+		while (m_thread_exit == 1) {
+			m_cond->Wait();
+		}
+		m_mutex->Unlock();
+		delete m_cond;
+		delete m_mutex;
+		/*while (m_thread_exit == 1)
+			wxThread::Sleep(1);*/
 		//delete m_thread;
 		m_thread = NULL;
 	}
