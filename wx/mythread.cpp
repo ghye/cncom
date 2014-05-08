@@ -3,7 +3,7 @@
 #include "mythread.h"
 #include "menu.h"
 
-DECLARE_APP(CncomApp);
+//DECLARE_APP(CncomApp);
 
 CncomThread::CncomThread(CncomFrame *frame) : wxThread()
 {
@@ -22,7 +22,7 @@ void *CncomThread::Entry()
 	while (m_frame->m_thread_exit == 0) {
 		wxPrintf(_T("thread\n"));
 		wxThread::Sleep(2000);
-		//wxMicroSleep();
+		//wxMicroSleep(2000000);
 	}
 }
 

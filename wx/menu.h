@@ -35,8 +35,6 @@
     #include "wx/univ/theme.h"
 #endif // __WXUNIVERSAL__
 
-//#include "mythread.h"
-
 class CncomThread;
 
 class CncomApp : public wxApp

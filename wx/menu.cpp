@@ -92,6 +92,8 @@ CncomFrame::CncomFrame(const wxString& title)
 	as_bps.Add(_T("19200"));
 	as_bps.Add(_T("38400"));
 	as_bps.Add(_T("115200"));
+	as_bps.Add(_T("128000"));
+	as_bps.Add(_T("256000"));
 	wxChoice *text_bps_choice = new wxChoice(m_panel, CNCOM_ID_BPS_CHOICE, wxDefaultPosition, wxDefaultSize, as_bps);
 	m_ChoiceBps = text_bps_choice;
 	wxArrayString as_data_len;
