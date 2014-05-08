@@ -24,6 +24,8 @@ void *CncomThread::Entry()
 		wxThread::Sleep(2000);
 		//wxMicroSleep(2000000);
 	}
+
+	return NULL;
 }
 
 void CncomThread::OnExit()
