@@ -17,7 +17,7 @@ CXX = g++
 CXXFLAGS ?= 
 
 # Standard preprocessor flags (common for CC and CXX) 
-CPPFLAGS ?= 
+CPPFLAGS ?= -Wall
 
 # Standard linker flags 
 LDFLAGS ?= 
