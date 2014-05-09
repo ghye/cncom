@@ -18,6 +18,8 @@
 #include "menu.h"
 #include "mythread.h"
 
+#include <wx/timer.h>
+
 enum
 {
 	CNCOM_ID_TEXT = wxID_HIGHEST + 1,
@@ -27,6 +29,9 @@ enum
 	CNCOM_ID_DATALEN_CHOICE,
 	CNCOM_ID_CRC_CHOICE,
 	CNCOM_ID_STOP_BITS_CHOICE,
+
+
+	CNCOM_ID_TIMER,
 };
 
 wxString g_string_open = wxString(_T("open"));
@@ -37,6 +42,7 @@ IMPLEMENT_APP(CncomApp)
 BEGIN_EVENT_TABLE(CncomFrame, wxFrame)
 	EVT_BUTTON(CNCOM_ID_OPEN_CLOSE_BUTTON, CncomFrame::doOpenCloseCom)
 	EVT_CLOSE(CncomFrame::OnClose)
+	EVT_TIMER(CNCOM_ID_TIMER, CncomFrame::OnTimer)
 END_EVENT_TABLE()
 
 
@@ -49,7 +55,7 @@ bool CncomApp::OnInit()
 }
 
 CncomFrame::CncomFrame(const wxString& title)
-             : wxFrame(NULL, wxID_ANY, title, wxPoint(100, 100))
+             : wxFrame(NULL, wxID_ANY, title, wxPoint(100, 100)), m_timer(this, CNCOM_ID_TIMER)
 {
 	m_panel = new wxPanel(this, wxID_ANY);
 	
@@ -153,14 +159,37 @@ CncomFrame::CncomFrame(const wxString& title)
 		m_thread->Run();
 	}
 	wxPrintf(_T("thread runing now\n"));
+
+	m_timer.Start(10);
 }
 
 CncomFrame::~CncomFrame()
 {
 }
 
+void CncomFrame::OnTimer(wxTimerEvent& event)
+{
+	int len, i;
+	unsigned char *p;
+
+	len = m_thread->GetBuf(&p);
+	if (len > 0) {
+		for (i = 0; i < len; i++)
+			m_buf.Add(p[i]);
+		len = m_buf.GetCount();
+		if (len > 0) {
+			wxPrintf(_T("read:\n"));
+			for (i = 0; i < len; i++)
+				wxPrintf(_T("%d "), m_buf.Item(i));
+			wxPrintf(_T("\n"));
+		}
+	}
+}
+
 void CncomFrame::OnClose(wxCloseEvent& event)
 {
+	m_timer.Stop();
+
 	if (m_thread != NULL) {
 		m_thread_exit = 1;
 		while (m_thread_exit == 1) {

@@ -35,6 +35,10 @@
     #include "wx/univ/theme.h"
 #endif // __WXUNIVERSAL__
 
+#include "deftype.h"
+
+#define BUF_LEN_THREAD	1024
+
 class CncomFrame;
 
 class CncomThread : public wxThread
@@ -46,9 +50,14 @@ public:
 	virtual void *Entry();
 	virtual void OnExit();
 
+	void AddBuf(unsigned char v);
+	int GetBuf(unsigned char **p);
+
 private:
 	CncomFrame *m_frame;
-
+	int head;
+	int tail;
+	unsigned char m_buf[BUF_LEN_THREAD];
 };
 
 #endif

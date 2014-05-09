@@ -35,6 +35,8 @@
     #include "wx/univ/theme.h"
 #endif // __WXUNIVERSAL__
 
+#include "deftype.h"
+
 class CncomThread;
 
 class CncomApp : public wxApp
@@ -59,6 +61,8 @@ public:
 	CncomFrame(const wxString& title);
 	virtual ~CncomFrame();
 
+	void OnTimer(wxTimerEvent& event);
+
 public:
 	char m_thread_exit;
 	wxMutex		*m_mutex;
@@ -80,6 +84,9 @@ private:
 	wxChoice	*m_ChoiceStopBits;
 
 	CncomThread	*m_thread;
+	wxArrayUchar	m_buf;
+
+	wxTimer m_timer;
 
 	DECLARE_EVENT_TABLE()
 };
