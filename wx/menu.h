@@ -77,6 +77,8 @@ private:
 	CncomThread *doCreateThread();
 	void doToHex(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl);
 	void doToCharacter(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl);
+	void UpdateStatusRead(int v);
+	void UpdateStatusTransmit(int v);
 
 	wxPanel		*m_panel;
 	wxTextCtrl 	*m_textctrl;

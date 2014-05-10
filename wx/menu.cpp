@@ -91,7 +91,7 @@ CncomFrame::CncomFrame(const wxString& title)
 
 
 
-	wxFlexGridSizer *sizer_param_set = new wxFlexGridSizer(2, 2, 0, 0);
+	wxGridSizer *sizer_param_set = new wxGridSizer(5, 2, 0, 0);
 
 	wxStaticText *text_bps = new wxStaticText(m_panel, wxID_ANY, _T("Bps"));
 	wxStaticText *text_data_len = new wxStaticText(m_panel, wxID_ANY, _T("DataLen"));
@@ -148,11 +148,14 @@ CncomFrame::CncomFrame(const wxString& title)
 	sizer_top->Add(sizer_up, 0, wxLEFT | wxRIGHT, 5);
 	sizer_top->Add(sizer_down, 0, wxLEFT | wxRIGHT, 5);
 
+#if wxUSE_STATUSBAR
+	CreateStatusBar(2);
+#endif
+
 	m_panel->SetSizer(sizer_top);
 
 	sizer_top->Fit(this);
 	sizer_top->SetSizeHints(this);
-
 
 	/* create and run thread */
 	m_thread_exit = 0;
@@ -191,6 +194,11 @@ void CncomFrame::OnTimer(wxTimerEvent& event)
 			doToHex(m_buf, head, len, m_textctrl);
 		else
 			doToCharacter(m_buf, head, len, m_textctrl);
+
+#if wxUSE_STATUSBAR
+		UpdateStatusRead(len);
+		UpdateStatusTransmit(len - head);
+#endif
 	}
 }
 
@@ -280,3 +288,19 @@ void CncomFrame::doToCharacter(wxArrayUchar& aUchar, int head, int tail, wxTextC
 		textctrl->AppendText(wxString::FromUTF8(buf));
 	}
 }
+
+#if wxUSE_STATUSBAR
+void CncomFrame::UpdateStatusRead(int v)
+{
+	wxString msg;
+	msg.Printf(wxT("R: %d"), v);
+	SetStatusText(msg, 1);
+}
+
+void CncomFrame::UpdateStatusTransmit(int v)
+{
+	wxString msg;
+	msg.Printf(wxT("T: %d"), v);
+	SetStatusText(msg, 0);
+}
+#endif
