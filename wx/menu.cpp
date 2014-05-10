@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        lboxtest.cpp
-// Purpose:     wxListBox sample
-// Author:      Vadim Zeitlin
-// Id:          $Id: lboxtest.cpp 41547 2006-10-02 05:36:31Z PC $
-// Copyright:   (c) 2000 Vadim Zeitlin
+// Name:        menu.cpp
+// Purpose:     Cncom menu
+// Author:      GuoHong Ye
+// Id:          
+// Copyright:   (c) 2014 GuoHong Ye
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
