@@ -59,6 +59,8 @@ bool CncomApp::OnInit()
 CncomFrame::CncomFrame(const wxString& title)
              : wxFrame(NULL, wxID_ANY, title, wxPoint(100, 100)), m_timer(this, CNCOM_ID_TIMER)
 {
+	#define PARAM_CHOICE_WIDTH	85
+
 	m_panel = new wxPanel(this, wxID_ANY);
 	
 	wxSizer *sizer_top = new wxBoxSizer(wxVERTICAL);
@@ -108,24 +110,31 @@ CncomFrame::CncomFrame(const wxString& title)
 	as_bps.Add(wxT("115200"));
 	as_bps.Add(wxT("128000"));
 	as_bps.Add(wxT("256000"));
-	wxChoice *text_bps_choice = new wxChoice(m_panel, CNCOM_ID_BPS_CHOICE, wxDefaultPosition, wxDefaultSize, as_bps);
+	wxChoice *text_bps_choice = new wxChoice(m_panel, CNCOM_ID_BPS_CHOICE,
+		wxDefaultPosition, wxSize(PARAM_CHOICE_WIDTH, -1), as_bps);
 	m_ChoiceBps = text_bps_choice;
 	wxArrayString as_data_len;
 	as_data_len.Add(wxT("8"));
 	as_data_len.Add(wxT("9"));
-	wxChoice *text_data_len_choice = new wxChoice(m_panel, CNCOM_ID_DATALEN_CHOICE, wxDefaultPosition, wxDefaultSize, as_data_len);
+	wxChoice *text_data_len_choice = new wxChoice(m_panel,
+		CNCOM_ID_DATALEN_CHOICE, wxDefaultPosition,
+		wxSize(PARAM_CHOICE_WIDTH, -1), as_data_len);
 	m_ChoiceDataLen = text_data_len_choice;
 	wxArrayString as_parity;
 	as_parity.Add(wxT("NO"));
 	as_parity.Add(wxT("ODD"));
 	as_parity.Add(wxT("EVEN"));
-	wxChoice *text_parity_choice = new wxChoice(m_panel, CNCOM_ID_CRC_CHOICE, wxDefaultPosition, wxDefaultSize, as_parity);
+	wxChoice *text_parity_choice = new wxChoice(m_panel,
+		CNCOM_ID_CRC_CHOICE, wxDefaultPosition,
+		wxSize(PARAM_CHOICE_WIDTH, -1), as_parity);
 	m_ChoiceParity = text_parity_choice;
 	wxArrayString as_stop_bits;
 	as_stop_bits.Add(wxT("1"));
 	as_stop_bits.Add(wxT("1.5"));
 	as_stop_bits.Add(wxT("2"));
-	wxChoice *text_stop_bits_choice = new wxChoice(m_panel, CNCOM_ID_STOP_BITS_CHOICE, wxDefaultPosition, wxDefaultSize, as_stop_bits);
+	wxChoice *text_stop_bits_choice = new wxChoice(m_panel,
+		CNCOM_ID_STOP_BITS_CHOICE, wxDefaultPosition,
+		wxSize(PARAM_CHOICE_WIDTH, -1), as_stop_bits);
 	m_ChoiceStopBits = text_stop_bits_choice;
 	sizer_param_set->Add(text_bps, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	sizer_param_set->Add(text_bps_choice);
