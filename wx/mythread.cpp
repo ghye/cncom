@@ -25,11 +25,11 @@ void *CncomThread::Entry()
 	while (m_frame->m_thread_exit == 0) {
 		wxPrintf(_T("write:\n"));
 		AddBuf(v);
-		wxPrintf(_T("%d "), v);
+		wxPrintf(_T("%d\n"), v);
 		v++;
-		AddBuf(v);
+		/*AddBuf(v);
 		wxPrintf(_T("%d \n"), v);
-		v++;
+		v++;*/
 		
 		wxThread::Sleep(2000);
 		//wxMicroSleep(2000000);

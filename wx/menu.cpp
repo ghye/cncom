@@ -24,6 +24,7 @@ enum
 {
 	CNCOM_ID_TEXT = wxID_HIGHEST + 1,
 	CNCOM_ID_OPEN_CLOSE_BUTTON,
+	CNCOM_ID_HEX_CHOICE,
 	CNCOM_ID_TEXT_COM_DEV,
 	CNCOM_ID_BPS_CHOICE,
 	CNCOM_ID_DATALEN_CHOICE,
@@ -41,6 +42,7 @@ IMPLEMENT_APP(CncomApp)
 
 BEGIN_EVENT_TABLE(CncomFrame, wxFrame)
 	EVT_BUTTON(CNCOM_ID_OPEN_CLOSE_BUTTON, CncomFrame::doOpenCloseCom)
+	EVT_CHECKBOX(CNCOM_ID_HEX_CHOICE, CncomFrame::OnHexCheckBox)
 	EVT_CLOSE(CncomFrame::OnClose)
 	EVT_TIMER(CNCOM_ID_TIMER, CncomFrame::OnTimer)
 END_EVENT_TABLE()
@@ -69,6 +71,8 @@ CncomFrame::CncomFrame(const wxString& title)
 				wxDefaultPosition, wxSize(800, 400), wxTE_MULTILINE);
 	textctrl->SetEditable(false);
 	textctrl->AppendText(_T("cncom text string"));
+	textctrl->Clear();
+	m_textctrl = textctrl;
 
 	sizer_up->Add(textctrl, 0, wxLEFT | wxRIGHT, 5);
 
@@ -77,8 +81,12 @@ CncomFrame::CncomFrame(const wxString& title)
 	m_OpenCloseCom = btn_open_close;
 	wxTextCtrl *text_com_dev = new wxTextCtrl(m_panel, CNCOM_ID_TEXT_COM_DEV, _T("/dev/ttyUSB0"));
 	m_ComPath = text_com_dev;
+	m_hex_choice = new wxCheckBox(m_panel, CNCOM_ID_HEX_CHOICE,
+		_T("Hex"), wxDefaultPosition, wxDefaultSize);
 	sizer_open_close->Add(btn_open_close, 0, wxLEFT | wxRIGHT, 5);
 	sizer_open_close->Add(text_com_dev, 0, wxLEFT | wxRIGHT, 5);
+	sizer_open_close->Add(m_hex_choice, 0, wxLEFT | wxRIGHT, 5);
+
 	sizer_down_p1->Add(sizer_open_close, 0, wxLEFT | wxRIGHT, 5);
 
 
@@ -170,19 +178,19 @@ CncomFrame::~CncomFrame()
 void CncomFrame::OnTimer(wxTimerEvent& event)
 {
 	int len, i;
+	int head;
 	unsigned char *p;
 
 	len = m_thread->GetBuf(&p);
 	if (len > 0) {
+		head = m_buf.GetCount();
 		for (i = 0; i < len; i++)
 			m_buf.Add(p[i]);
 		len = m_buf.GetCount();
-		if (len > 0) {
-			wxPrintf(_T("read:\n"));
-			for (i = 0; i < len; i++)
-				wxPrintf(_T("%d "), m_buf.Item(i));
-			wxPrintf(_T("\n"));
-		}
+		if (m_hex_choice->IsChecked())
+			doToHex(m_buf, head, m_buf.GetCount(), m_textctrl);
+		else
+			doToCharacter(m_buf, head, m_buf.GetCount(), m_textctrl);
 	}
 }
 
@@ -198,9 +206,6 @@ void CncomFrame::OnClose(wxCloseEvent& event)
 		m_mutex->Unlock();
 		delete m_cond;
 		delete m_mutex;
-		/*while (m_thread_exit == 1)
-			wxThread::Sleep(1);*/
-		//delete m_thread;
 		m_thread = NULL;
 	}
 
@@ -226,6 +231,21 @@ void CncomFrame::doOpenCloseCom(wxCommandEvent& event)
 	wxPrintf(_T("stopbits %s\r\n"), (m_ChoiceStopBits->GetString(m_ChoiceStopBits->GetSelection())).c_str());
 }
 
+void CncomFrame::OnHexCheckBox(wxCommandEvent& event)
+{
+	if (event.IsChecked()) {
+		wxPrintf(_T("Hex checked\n"));
+		m_textctrl->Clear();
+		doToHex(m_buf, 0, m_buf.GetCount(), m_textctrl);
+	} else {
+		wxPrintf(_T("Hex unchecked\n"));
+		m_textctrl->Clear();
+		doToCharacter(m_buf, 0, m_buf.GetCount(), m_textctrl);
+	}
+
+	event.Skip();
+}
+
 CncomThread *CncomFrame::doCreateThread()
 {
 	CncomThread *thread = new CncomThread(this);
@@ -236,4 +256,27 @@ CncomThread *CncomFrame::doCreateThread()
 	}
 
 	return thread;
+}
+
+
+void CncomFrame::doToHex(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl)
+{
+	int i;
+	char buf[3];
+
+	for (i = head; i < tail; i++) {
+		sprintf(buf, "%.2X ", aUchar.Item(i));
+		textctrl->AppendText(wxString::FromUTF8(buf));
+	}
+}
+
+void CncomFrame::doToCharacter(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl)
+{
+	int i;
+	char buf[3];
+
+	for (i = head; i < tail; i++) {
+		sprintf(buf, "%c", aUchar.Item(i));
+		textctrl->AppendText(wxString::FromUTF8(buf));
+	}
 }

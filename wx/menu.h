@@ -73,10 +73,15 @@ protected:
 
 private:
 	void doOpenCloseCom(wxCommandEvent& event);
+	void OnHexCheckBox(wxCommandEvent& event);
 	CncomThread *doCreateThread();
+	void doToHex(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl);
+	void doToCharacter(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl);
 
 	wxPanel		*m_panel;
+	wxTextCtrl 	*m_textctrl;
 	wxButton	*m_OpenCloseCom;
+	wxCheckBox 	*m_hex_choice;
 	wxTextCtrl	*m_ComPath;
 	wxChoice	*m_ChoiceBps;
 	wxChoice	*m_ChoiceDataLen;
