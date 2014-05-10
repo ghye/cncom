@@ -50,7 +50,7 @@ END_EVENT_TABLE()
 
 bool CncomApp::OnInit()
 {
-	wxFrame *frame = new CncomFrame(wxT("wxListBox sample"));
+	wxFrame *frame = new CncomFrame(wxT("Cncom"));
 	frame->Show();
 
 	return true;
