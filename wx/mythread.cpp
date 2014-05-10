@@ -7,7 +7,7 @@
 
 CncomThread::CncomThread(CncomFrame *frame) : wxThread()
 {
-	wxPrintf(_T("struct CncomThread\n"));
+	wxPrintf(wxT("struct CncomThread\n"));
 	m_frame = frame;
 	head = 0;
 	tail = 0;
@@ -15,7 +15,7 @@ CncomThread::CncomThread(CncomFrame *frame) : wxThread()
 
 CncomThread::~CncomThread()
 {
-	wxPrintf(_T("destruct CncomThread\n"));
+	wxPrintf(wxT("destruct CncomThread\n"));
 }
 
 void *CncomThread::Entry()
@@ -23,12 +23,12 @@ void *CncomThread::Entry()
 	unsigned char v = 0xfe;
 
 	while (m_frame->m_thread_exit == 0) {
-		wxPrintf(_T("write:\n"));
+		wxPrintf(wxT("write:\n"));
 		AddBuf(v);
-		wxPrintf(_T("%d\n"), v);
+		wxPrintf(wxT("%d\n"), v);
 		v++;
 		/*AddBuf(v);
-		wxPrintf(_T("%d \n"), v);
+		wxPrintf(wxT("%d \n"), v);
 		v++;*/
 		
 		wxThread::Sleep(2000);

@@ -35,8 +35,8 @@ enum
 	CNCOM_ID_TIMER,
 };
 
-wxString g_string_open = wxString(_T("open"));
-wxString g_string_close = wxString(_T("close"));
+wxString g_string_open = wxString(wxT("open"));
+wxString g_string_close = wxString(wxT("close"));
 
 IMPLEMENT_APP(CncomApp)
 
@@ -50,7 +50,7 @@ END_EVENT_TABLE()
 
 bool CncomApp::OnInit()
 {
-	wxFrame *frame = new CncomFrame(_T("wxListBox sample"));
+	wxFrame *frame = new CncomFrame(wxT("wxListBox sample"));
 	frame->Show();
 
 	return true;
@@ -67,10 +67,10 @@ CncomFrame::CncomFrame(const wxString& title)
 	wxSizer *sizer_down_p1 = new wxBoxSizer(wxVERTICAL);
 	wxSizer *sizer_down_p2 = new wxBoxSizer(wxHORIZONTAL);
 
-	wxTextCtrl *textctrl = new wxTextCtrl(m_panel, CNCOM_ID_TEXT, _T("cncom text"),
+	wxTextCtrl *textctrl = new wxTextCtrl(m_panel, CNCOM_ID_TEXT, wxT("cncom text"),
 				wxDefaultPosition, wxSize(800, 400), wxTE_MULTILINE);
 	textctrl->SetEditable(false);
-	textctrl->AppendText(_T("cncom text string"));
+	textctrl->AppendText(wxT("cncom text string"));
 	textctrl->Clear();
 	m_textctrl = textctrl;
 
@@ -79,10 +79,10 @@ CncomFrame::CncomFrame(const wxString& title)
 	wxSizer *sizer_open_close = new wxBoxSizer(wxHORIZONTAL);
 	wxButton *btn_open_close = new wxButton(m_panel, CNCOM_ID_OPEN_CLOSE_BUTTON, g_string_open);
 	m_OpenCloseCom = btn_open_close;
-	wxTextCtrl *text_com_dev = new wxTextCtrl(m_panel, CNCOM_ID_TEXT_COM_DEV, _T("/dev/ttyUSB0"));
+	wxTextCtrl *text_com_dev = new wxTextCtrl(m_panel, CNCOM_ID_TEXT_COM_DEV, wxT("/dev/ttyUSB0"));
 	m_ComPath = text_com_dev;
 	m_hex_choice = new wxCheckBox(m_panel, CNCOM_ID_HEX_CHOICE,
-		_T("Hex"), wxDefaultPosition, wxDefaultSize);
+		wxT("Hex"), wxDefaultPosition, wxDefaultSize);
 	sizer_open_close->Add(btn_open_close, 0, wxLEFT | wxRIGHT, 5);
 	sizer_open_close->Add(text_com_dev, 0, wxLEFT | wxRIGHT, 5);
 	sizer_open_close->Add(m_hex_choice, 0, wxLEFT | wxRIGHT, 5);
@@ -93,38 +93,38 @@ CncomFrame::CncomFrame(const wxString& title)
 
 	wxGridSizer *sizer_param_set = new wxGridSizer(5, 2, 0, 0);
 
-	wxStaticText *text_bps = new wxStaticText(m_panel, wxID_ANY, _T("Bps"));
-	wxStaticText *text_data_len = new wxStaticText(m_panel, wxID_ANY, _T("DataLen"));
-	wxStaticText *text_parity = new wxStaticText(m_panel, wxID_ANY, _T("Parity"));
-	wxStaticText *text_stop_bits = new wxStaticText(m_panel, wxID_ANY, _T("StopBits"));
+	wxStaticText *text_bps = new wxStaticText(m_panel, wxID_ANY, wxT("Bps"));
+	wxStaticText *text_data_len = new wxStaticText(m_panel, wxID_ANY, wxT("DataLen"));
+	wxStaticText *text_parity = new wxStaticText(m_panel, wxID_ANY, wxT("Parity"));
+	wxStaticText *text_stop_bits = new wxStaticText(m_panel, wxID_ANY, wxT("StopBits"));
 	wxArrayString as_bps;
-	as_bps.Add(_T("300"));
-	as_bps.Add(_T("1200"));
-	as_bps.Add(_T("2400"));
-	as_bps.Add(_T("4800"));
-	as_bps.Add(_T("9600"));
-	as_bps.Add(_T("19200"));
-	as_bps.Add(_T("38400"));
-	as_bps.Add(_T("115200"));
-	as_bps.Add(_T("128000"));
-	as_bps.Add(_T("256000"));
+	as_bps.Add(wxT("300"));
+	as_bps.Add(wxT("1200"));
+	as_bps.Add(wxT("2400"));
+	as_bps.Add(wxT("4800"));
+	as_bps.Add(wxT("9600"));
+	as_bps.Add(wxT("19200"));
+	as_bps.Add(wxT("38400"));
+	as_bps.Add(wxT("115200"));
+	as_bps.Add(wxT("128000"));
+	as_bps.Add(wxT("256000"));
 	wxChoice *text_bps_choice = new wxChoice(m_panel, CNCOM_ID_BPS_CHOICE, wxDefaultPosition, wxDefaultSize, as_bps);
 	m_ChoiceBps = text_bps_choice;
 	wxArrayString as_data_len;
-	as_data_len.Add(_T("8"));
-	as_data_len.Add(_T("9"));
+	as_data_len.Add(wxT("8"));
+	as_data_len.Add(wxT("9"));
 	wxChoice *text_data_len_choice = new wxChoice(m_panel, CNCOM_ID_DATALEN_CHOICE, wxDefaultPosition, wxDefaultSize, as_data_len);
 	m_ChoiceDataLen = text_data_len_choice;
 	wxArrayString as_parity;
-	as_parity.Add(_T("NO"));
-	as_parity.Add(_T("ODD"));
-	as_parity.Add(_T("EVEN"));
+	as_parity.Add(wxT("NO"));
+	as_parity.Add(wxT("ODD"));
+	as_parity.Add(wxT("EVEN"));
 	wxChoice *text_parity_choice = new wxChoice(m_panel, CNCOM_ID_CRC_CHOICE, wxDefaultPosition, wxDefaultSize, as_parity);
 	m_ChoiceParity = text_parity_choice;
 	wxArrayString as_stop_bits;
-	as_stop_bits.Add(_T("1"));
-	as_stop_bits.Add(_T("1.5"));
-	as_stop_bits.Add(_T("2"));
+	as_stop_bits.Add(wxT("1"));
+	as_stop_bits.Add(wxT("1.5"));
+	as_stop_bits.Add(wxT("2"));
 	wxChoice *text_stop_bits_choice = new wxChoice(m_panel, CNCOM_ID_STOP_BITS_CHOICE, wxDefaultPosition, wxDefaultSize, as_stop_bits);
 	m_ChoiceStopBits = text_stop_bits_choice;
 	sizer_param_set->Add(text_bps, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -162,14 +162,14 @@ CncomFrame::CncomFrame(const wxString& title)
 	m_mutex = new wxMutex();
 	m_cond = new wxCondition(*m_mutex);
 	m_mutex->Lock();
-	wxPrintf(_T("thread 1\n"));
+	wxPrintf(wxT("thread 1\n"));
 	m_thread = doCreateThread();
-	wxPrintf(_T("thread 2\n"));
+	wxPrintf(wxT("thread 2\n"));
 	if (m_thread != NULL) {
-		wxPrintf(_T("thread 3\n"));
+		wxPrintf(wxT("thread 3\n"));
 		m_thread->Run();
 	}
-	wxPrintf(_T("thread runing now\n"));
+	wxPrintf(wxT("thread runing now\n"));
 
 	m_timer.Start(10);
 }
@@ -217,7 +217,7 @@ void CncomFrame::OnClose(wxCloseEvent& event)
 		m_thread = NULL;
 	}
 
-	wxPrintf(_T("frame closed\n"));
+	wxPrintf(wxT("frame closed\n"));
 
 	event.Skip();	/* must do that */
 }
@@ -226,27 +226,27 @@ void CncomFrame::doOpenCloseCom(wxCommandEvent& event)
 {
 	wxString str = m_OpenCloseCom->GetLabel();
 	wxString path = m_ComPath->GetLineText(0);
-	wxPrintf(_T("Do %s\r\n"), str.c_str());
-	wxPrintf(_T("Path %s\r\n"), path.c_str());
+	wxPrintf(wxT("Do %s\r\n"), str.c_str());
+	wxPrintf(wxT("Path %s\r\n"), path.c_str());
 	if (str == g_string_open)
 		m_OpenCloseCom->SetLabel(g_string_close);
 	else
 		m_OpenCloseCom->SetLabel(g_string_open);
 
-	wxPrintf(_T("bps %s\r\n"), (m_ChoiceBps->GetString(m_ChoiceBps->GetSelection())).c_str());
-	wxPrintf(_T("datalen %s\r\n"), (m_ChoiceDataLen->GetString(m_ChoiceDataLen->GetSelection())).c_str());
-	wxPrintf(_T("parity %s\r\n"), (m_ChoiceParity->GetString(m_ChoiceParity->GetSelection())).c_str());
-	wxPrintf(_T("stopbits %s\r\n"), (m_ChoiceStopBits->GetString(m_ChoiceStopBits->GetSelection())).c_str());
+	wxPrintf(wxT("bps %s\r\n"), (m_ChoiceBps->GetString(m_ChoiceBps->GetSelection())).c_str());
+	wxPrintf(wxT("datalen %s\r\n"), (m_ChoiceDataLen->GetString(m_ChoiceDataLen->GetSelection())).c_str());
+	wxPrintf(wxT("parity %s\r\n"), (m_ChoiceParity->GetString(m_ChoiceParity->GetSelection())).c_str());
+	wxPrintf(wxT("stopbits %s\r\n"), (m_ChoiceStopBits->GetString(m_ChoiceStopBits->GetSelection())).c_str());
 }
 
 void CncomFrame::OnHexCheckBox(wxCommandEvent& event)
 {
 	if (event.IsChecked()) {
-		wxPrintf(_T("Hex checked\n"));
+		wxPrintf(wxT("Hex checked\n"));
 		m_textctrl->Clear();
 		doToHex(m_buf, 0, m_buf.GetCount(), m_textctrl);
 	} else {
-		wxPrintf(_T("Hex unchecked\n"));
+		wxPrintf(wxT("Hex unchecked\n"));
 		m_textctrl->Clear();
 		doToCharacter(m_buf, 0, m_buf.GetCount(), m_textctrl);
 	}
@@ -258,7 +258,7 @@ CncomThread *CncomFrame::doCreateThread()
 {
 	CncomThread *thread = new CncomThread(this);
 	if (thread->Create() != wxTHREAD_NO_ERROR) {
-		wxPrintf(_T("thread create error\n"));
+		wxPrintf(wxT("thread create error\n"));
 		delete thread;
 		thread = NULL;
 	}
