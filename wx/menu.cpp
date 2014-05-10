@@ -188,9 +188,9 @@ void CncomFrame::OnTimer(wxTimerEvent& event)
 			m_buf.Add(p[i]);
 		len = m_buf.GetCount();
 		if (m_hex_choice->IsChecked())
-			doToHex(m_buf, head, m_buf.GetCount(), m_textctrl);
+			doToHex(m_buf, head, len, m_textctrl);
 		else
-			doToCharacter(m_buf, head, m_buf.GetCount(), m_textctrl);
+			doToCharacter(m_buf, head, len, m_textctrl);
 	}
 }
 
