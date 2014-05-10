@@ -270,22 +270,22 @@ CncomThread *CncomFrame::doCreateThread()
 void CncomFrame::doToHex(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl)
 {
 	int i;
-	char buf[3];
+	wxString msg;
 
 	for (i = head; i < tail; i++) {
-		sprintf(buf, "%.2X ", aUchar.Item(i));
-		textctrl->AppendText(wxString::FromUTF8(buf));
+		msg.Printf(wxT("%.2X "), aUchar.Item(i));
+		textctrl->AppendText(msg);
 	}
 }
 
 void CncomFrame::doToCharacter(wxArrayUchar& aUchar, int head, int tail, wxTextCtrl *textctrl)
 {
 	int i;
-	char buf[3];
+	wxString msg;
 
 	for (i = head; i < tail; i++) {
-		sprintf(buf, "%c", aUchar.Item(i));
-		textctrl->AppendText(wxString::FromUTF8(buf));
+		msg.Printf(wxT("%c"), aUchar.Item(i));
+		textctrl->AppendText(msg);
 	}
 }
 
