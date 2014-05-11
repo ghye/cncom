@@ -90,6 +90,13 @@ private:
 	wxChoice	*m_ChoiceParity;
 	wxChoice	*m_ChoiceStopBits;
 	wxChoice	*m_ChoiceHwFlowCtrl;
+	wxCheckBox	*m_CheckBoxDtr;
+	wxCheckBox	*m_CheckBoxRts;
+	wxCheckBox	*m_CheckBoxTimerTx;
+	wxCheckBox	*m_CheckBoxHexTx;
+	wxTextCtrl	*m_TextctrlTimeofTimerTx;
+	wxButton	*m_BtnTx;
+	wxTextCtrl	*m_TextctrlSend;
 
 	CncomThread	*m_thread;
 	wxArrayUchar	m_buf;

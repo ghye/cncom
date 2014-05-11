@@ -31,6 +31,13 @@ enum
 	CNCOM_ID_CRC_CHOICE,
 	CNCOM_ID_STOP_BITS_CHOICE,
 	CNCOM_ID_HW_FLOW_CTRL_CHOICE,
+	CNCOM_ID_DTR_CHOICE,
+	CNCOM_ID_RTS_CHOICE,
+	CNCOM_ID_TIMER_TX_CHOICE,
+	CNCOM_ID_HEX_TX_CHOICE,
+	CNCOM_ID_TIMEROF_TIMERTX,
+	CNCOM_ID_TX_BUTTON,
+	CNCOM_ID_TEXT_SEND,
 
 
 	CNCOM_ID_TIMER,
@@ -60,15 +67,17 @@ bool CncomApp::OnInit()
 CncomFrame::CncomFrame(const wxString& title)
              : wxFrame(NULL, wxID_ANY, title, wxPoint(100, 100)), m_timer(this, CNCOM_ID_TIMER)
 {
-	#define PARAM_CHOICE_WIDTH	85
+	#define PARAM_CHOICE_WIDTH		85
+	#define PARAM_TX_WIDTH			100
+	#define PARAM_TX_INPUT_TEXTCTRL_WIDTH	500
 
 	m_panel = new wxPanel(this, wxID_ANY);
 	
-	wxSizer *sizer_top = new wxBoxSizer(wxVERTICAL);
-	wxSizer *sizer_up = new wxBoxSizer(wxVERTICAL);
-	wxSizer *sizer_down = new wxBoxSizer(wxVERTICAL);
-	wxSizer *sizer_down_p1 = new wxBoxSizer(wxVERTICAL);
-	wxSizer *sizer_down_p2 = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer *sizer_top = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizer_up = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizer_down = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizer_down_p1 = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizer_down_p2 = new wxBoxSizer(wxHORIZONTAL);
 
 	wxTextCtrl *textctrl = new wxTextCtrl(m_panel, CNCOM_ID_TEXT, wxT("cncom text"),
 				wxDefaultPosition, wxSize(800, 400), wxTE_MULTILINE);
@@ -96,7 +105,7 @@ CncomFrame::CncomFrame(const wxString& title)
 
 	wxGridSizer *sizer_param_set = new wxGridSizer(5, 2, 0, 0);
 
-	wxStaticText *text_bps = new wxStaticText(m_panel, wxID_ANY, wxT("Bps"));
+	wxStaticText *text_bps = new wxStaticText(m_panel, wxID_ANY, wxT("Bps"), wxDefaultPosition, wxSize(PARAM_CHOICE_WIDTH, 20));
 	wxStaticText *text_data_len = new wxStaticText(m_panel, wxID_ANY, wxT("DataLen"));
 	wxStaticText *text_parity = new wxStaticText(m_panel, wxID_ANY, wxT("Parity"));
 	wxStaticText *text_stop_bits = new wxStaticText(m_panel, wxID_ANY, wxT("StopBits"));
@@ -147,20 +156,48 @@ CncomFrame::CncomFrame(const wxString& title)
 		wxSize(PARAM_CHOICE_WIDTH, -1), as_hw_flow_ctrl);
 	m_ChoiceHwFlowCtrl = text_hw_flow_ctrl_choice;
 	sizer_param_set->Add(text_bps, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	sizer_param_set->Add(text_bps_choice);
+	sizer_param_set->Add(text_bps_choice, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
 	sizer_param_set->Add(text_data_len, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	sizer_param_set->Add(text_data_len_choice);
+	sizer_param_set->Add(text_data_len_choice, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
 	sizer_param_set->Add(text_parity, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	sizer_param_set->Add(text_parity_choice);
+	sizer_param_set->Add(text_parity_choice, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
 	sizer_param_set->Add(text_stop_bits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	sizer_param_set->Add(text_stop_bits_choice);
+	sizer_param_set->Add(text_stop_bits_choice, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
 	sizer_param_set->Add(text_hardware_flow_ctrl , 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	sizer_param_set->Add(text_hw_flow_ctrl_choice);
+	sizer_param_set->Add(text_hw_flow_ctrl_choice, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
 
 	sizer_down_p2->Add(sizer_param_set, 0, wxLEFT | wxRIGHT, 5);
 
-
-
+	wxGridSizer *sizer_tx = new wxGridSizer(4, 2, 0, 0);
+	m_CheckBoxDtr = new wxCheckBox(m_panel, CNCOM_ID_DTR_CHOICE,
+		wxT("DTR"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	m_CheckBoxRts = new wxCheckBox(m_panel, CNCOM_ID_RTS_CHOICE,
+		wxT("RTS"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	m_CheckBoxTimerTx = new wxCheckBox(m_panel, CNCOM_ID_TIMER_TX_CHOICE,
+		wxT("TimerTx"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	m_CheckBoxHexTx = new wxCheckBox(m_panel, CNCOM_ID_HEX_TX_CHOICE,
+		wxT("HexTx"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	m_TextctrlTimeofTimerTx = new wxTextCtrl(m_panel, CNCOM_ID_TIMEROF_TIMERTX, wxT(""),
+				wxDefaultPosition, wxSize(PARAM_TX_WIDTH, -1));
+	wxStaticText *text_timer_unit = new wxStaticText(m_panel, wxID_ANY, wxT("ms/time"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	wxStaticText *text_input_and_send = new wxStaticText(m_panel, wxID_ANY, wxT("InputAndSend:"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	m_BtnTx = new wxButton(m_panel, CNCOM_ID_TX_BUTTON, wxT("Send"));
+	m_TextctrlSend = new wxTextCtrl(m_panel, CNCOM_ID_TEXT_SEND, wxT(""),
+				wxDefaultPosition, wxSize(PARAM_TX_INPUT_TEXTCTRL_WIDTH, -1));
+	sizer_tx->Add(m_CheckBoxDtr, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(m_CheckBoxRts, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(m_CheckBoxTimerTx, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(m_CheckBoxHexTx, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(m_TextctrlTimeofTimerTx, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(text_timer_unit, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(text_input_and_send, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	sizer_tx->Add(m_BtnTx, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+	wxBoxSizer *sizer_down_p2_middle = new wxBoxSizer(wxVERTICAL);
+	wxGridSizer *sizer_tx_input_textctrl = new wxGridSizer(1, 1, 0, 0);
+	sizer_tx_input_textctrl->Add(m_TextctrlSend, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
+	sizer_down_p2_middle->Add(sizer_tx, 0, wxLEFT | wxRIGHT, 0);
+	sizer_down_p2_middle->Add(sizer_tx_input_textctrl, 0, wxLEFT | wxRIGHT, 0);
+	sizer_down_p2->Add(sizer_down_p2_middle, 0, wxLEFT | wxRIGHT, 0);
 
 
 	sizer_down->Add(sizer_down_p1, 0, wxLEFT | wxRIGHT, 5);
