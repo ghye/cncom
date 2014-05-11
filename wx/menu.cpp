@@ -30,6 +30,7 @@ enum
 	CNCOM_ID_DATALEN_CHOICE,
 	CNCOM_ID_CRC_CHOICE,
 	CNCOM_ID_STOP_BITS_CHOICE,
+	CNCOM_ID_HW_FLOW_CTRL_CHOICE,
 
 
 	CNCOM_ID_TIMER,
@@ -99,6 +100,7 @@ CncomFrame::CncomFrame(const wxString& title)
 	wxStaticText *text_data_len = new wxStaticText(m_panel, wxID_ANY, wxT("DataLen"));
 	wxStaticText *text_parity = new wxStaticText(m_panel, wxID_ANY, wxT("Parity"));
 	wxStaticText *text_stop_bits = new wxStaticText(m_panel, wxID_ANY, wxT("StopBits"));
+	wxStaticText *text_hardware_flow_ctrl = new wxStaticText(m_panel, wxID_ANY, wxT("HwFlowCtrl"));
 	wxArrayString as_bps;
 	as_bps.Add(wxT("300"));
 	as_bps.Add(wxT("1200"));
@@ -136,6 +138,14 @@ CncomFrame::CncomFrame(const wxString& title)
 		CNCOM_ID_STOP_BITS_CHOICE, wxDefaultPosition,
 		wxSize(PARAM_CHOICE_WIDTH, -1), as_stop_bits);
 	m_ChoiceStopBits = text_stop_bits_choice;
+	wxArrayString as_hw_flow_ctrl;
+	as_hw_flow_ctrl.Add(wxT("None"));
+	as_hw_flow_ctrl.Add(wxT("Hw"));
+	as_hw_flow_ctrl.Add(wxT("Sw"));
+	wxChoice *text_hw_flow_ctrl_choice = new wxChoice(m_panel,
+		CNCOM_ID_HW_FLOW_CTRL_CHOICE, wxDefaultPosition,
+		wxSize(PARAM_CHOICE_WIDTH, -1), as_hw_flow_ctrl);
+	m_ChoiceHwFlowCtrl = text_hw_flow_ctrl_choice;
 	sizer_param_set->Add(text_bps, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	sizer_param_set->Add(text_bps_choice);
 	sizer_param_set->Add(text_data_len, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -144,6 +154,8 @@ CncomFrame::CncomFrame(const wxString& title)
 	sizer_param_set->Add(text_parity_choice);
 	sizer_param_set->Add(text_stop_bits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	sizer_param_set->Add(text_stop_bits_choice);
+	sizer_param_set->Add(text_hardware_flow_ctrl , 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	sizer_param_set->Add(text_hw_flow_ctrl_choice);
 
 	sizer_down_p2->Add(sizer_param_set, 0, wxLEFT | wxRIGHT, 5);
 

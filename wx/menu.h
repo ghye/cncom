@@ -89,6 +89,7 @@ private:
 	wxChoice	*m_ChoiceDataLen;
 	wxChoice	*m_ChoiceParity;
 	wxChoice	*m_ChoiceStopBits;
+	wxChoice	*m_ChoiceHwFlowCtrl;
 
 	CncomThread	*m_thread;
 	wxArrayUchar	m_buf;
