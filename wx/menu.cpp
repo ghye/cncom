@@ -180,7 +180,7 @@ CncomFrame::CncomFrame(const wxString& title)
 	m_TextctrlTimeofTimerTx = new wxTextCtrl(m_panel, CNCOM_ID_TIMEROF_TIMERTX, wxT(""),
 				wxDefaultPosition, wxSize(PARAM_TX_WIDTH, -1));
 	wxStaticText *text_timer_unit = new wxStaticText(m_panel, wxID_ANY, wxT("ms/time"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
-	wxStaticText *text_input_and_send = new wxStaticText(m_panel, wxID_ANY, wxT("InputAndSend:"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
+	wxStaticText *text_input_and_send = new wxStaticText(m_panel, wxID_ANY, wxT("InputToSend:"), wxDefaultPosition, wxSize(PARAM_TX_WIDTH, 20));
 	m_BtnTx = new wxButton(m_panel, CNCOM_ID_TX_BUTTON, wxT("Send"));
 	m_TextctrlSend = new wxTextCtrl(m_panel, CNCOM_ID_TEXT_SEND, wxT(""),
 				wxDefaultPosition, wxSize(PARAM_TX_INPUT_TEXTCTRL_WIDTH, -1));
